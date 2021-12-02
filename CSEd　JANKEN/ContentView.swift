@@ -12,6 +12,8 @@ struct ContentView: View {
     @State private var text = "じゃんけん"
     @State private var myWin = "0"
     @State private var myLose = "0"
+    // 手を選択できるかを判定する
+    @State private var canGame = false
    
     
     var body: some View {
@@ -26,27 +28,26 @@ struct ContentView: View {
             /** 相手の手 */
             
             HStack{
+                if(!self.canGame){
+                    
+                }
                 
-               
-                
-            if(computerHand == 0) {
-                Image("gu")
-                    .resizable()
-                    .scaledToFit()
-                    .rotationEffect(Angle(degrees: 180))
-            }
-            if(computerHand == 1) {
-                Image("choki")
-                    .resizable()
-                    .scaledToFit()
-                    .rotationEffect(Angle(degrees: 180))
-            }
-            if(computerHand == 2) {
-                Image("pa")
-                    .resizable()
-                    .scaledToFit()
-                    .rotationEffect(Angle(degrees: 180))
-            }
+                if(computerHand == 0) {
+                    Image("gu")
+                        .resizable()
+                        .scaledToFit()
+                        .rotationEffect(Angle(degrees: 180))
+                }else if(computerHand == 1) {
+                    Image("choki")
+                        .resizable()
+                        .scaledToFit()
+                        .rotationEffect(Angle(degrees: 180))
+                }else{
+                    Image("pa")
+                        .resizable()
+                        .scaledToFit()
+                        .rotationEffect(Angle(degrees: 180))
+                }
                 
                 VStack{
                 Text("相手の勝利数")
@@ -64,12 +65,18 @@ struct ContentView: View {
             
             HStack{
                 VStack{
-                Text("自分の勝利数")
-                Text(myWin)
-                    
-                    
+                    Text("自分の勝利数")
+                    Text(myWin)
+
+                    if(self.canGame){
+                        Button(action:{
+                            self.canGame = false
+                        }){
+                            Text("次へ")
+                        }
+                    }
                 }
-                
+                    
             
             if(playerHand == 0) {
                 Image("gu")
@@ -90,48 +97,55 @@ struct ContentView: View {
             /** ボタン */
             HStack {
                 Button(action: {
-                    print("グー")
-                    self.playerHand = 0;
-                    self.computerHand = chooseComputerHand();
-                    self.text = determineVictoryOrDefeat(playerHand:self.playerHand, computerHand:self.computerHand)
-                    
+                    onHandButton(handNum: 0)
                 }) {
                     Image("b_gu")
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                }
+                }.disabled(self.canGame)
+                
                 Button(action: {
-                    print("チョキ")
-                    self.playerHand = 1;
-                    self.computerHand = chooseComputerHand();
-                    self.text = determineVictoryOrDefeat(playerHand:self.playerHand, computerHand:self.computerHand)
+                    onHandButton(handNum: 1)
                 }) {
                     Image("b_choki")
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                }
+                }.disabled(self.canGame)
+                
                 Button(action: {
-                    print("パー")
-                    self.playerHand = 2;
-                    self.computerHand = chooseComputerHand();
-                    self.text = determineVictoryOrDefeat(playerHand:self.playerHand, computerHand:self.computerHand)
-                    
-                    
+                    onHandButton(handNum: 2)
                 }) {
                     Image("b_pa")
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                }
+                }.disabled(self.canGame)
                 
             }
-            
         }
+    }
+    func onHandButton(handNum:Int) -> Void{
+        if(handNum == 0){
+            print("グー")
+        }else if(handNum == 1){
+            print("チョキ")
+        }else{
+            print("パー")
+        }
+        self.playerHand = handNum;
+        self.computerHand = chooseComputerHand();
+        self.text = determineVictoryOrDefeat(playerHand:self.playerHand, computerHand:self.computerHand)
+        
+        // 手を選択された場合はゲームをそのまま続けられなくする
+        self.canGame = true
     }
     
 }
+
+    
+
  
 func chooseComputerHand() -> Int {
     let random = Int.random(in: 0..<3)
