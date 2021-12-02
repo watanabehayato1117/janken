@@ -5,7 +5,7 @@
 //  Created by watanabehayato on 2021/12/01.
 //
 import SwiftUI
- 
+
 struct ContentView: View {
     @State private var playerHand = 0
     @State private var computerHand = 0
@@ -14,7 +14,9 @@ struct ContentView: View {
     @State private var myLose = "0"
     // 手を選択できるかを判定する
     @State private var canGame = false
-   
+    // ランダム表示に使用する変数
+    @State private var counter = 0
+    @State private var enemyRandomImage = "gu"
     
     var body: some View {
       
@@ -28,33 +30,48 @@ struct ContentView: View {
             /** 相手の手 */
             
             HStack{
+                // 手を選択できる時間はランダム表示をする
                 if(!self.canGame){
-                    
-                }
-                
-                if(computerHand == 0) {
-                    Image("gu")
-                        .resizable()
-                        .scaledToFit()
-                        .rotationEffect(Angle(degrees: 180))
-                }else if(computerHand == 1) {
-                    Image("choki")
+                    Image(self.enemyRandomImage)
                         .resizable()
                         .scaledToFit()
                         .rotationEffect(Angle(degrees: 180))
                 }else{
-                    Image("pa")
-                        .resizable()
-                        .scaledToFit()
-                        .rotationEffect(Angle(degrees: 180))
+                    if(computerHand == 0) {
+                        Image("gu")
+                            .resizable()
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: 180))
+                    }else if(computerHand == 1) {
+                        Image("choki")
+                            .resizable()
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: 180))
+                    }else{
+                        Image("pa")
+                            .resizable()
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: 180))
+                    }
                 }
-                
                 VStack{
                 Text("相手の勝利数")
                 Text(myLose)
-                    
-                    
                 }
+                }.onAppear(){
+                    Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true){timer in
+                        self.counter += 1
+                        if(self.counter == 1){
+                            self.enemyRandomImage = "gu"
+                        }else if(self.counter == 2){
+                            self.enemyRandomImage = "choki"
+                        }else{
+                            self.enemyRandomImage = "pa"
+                            self.counter = 0
+                        }
+                    }
+                
+ 
             }
             /** 文字 */
             Text(text)
@@ -77,20 +94,20 @@ struct ContentView: View {
                     }
                 }
                     
-            
-            if(playerHand == 0) {
-                Image("gu")
-                    .resizable()
-                    .scaledToFit()
-            } else if(playerHand == 1) {
-                Image("choki")
-                    .resizable()
-                    .scaledToFit()
-            } else if(playerHand == 2) {
-                Image("pa")
-                   .resizable()
-                   .scaledToFit()
-            }
+                
+                if(playerHand == 0) {
+                    Image("gu")
+                        .resizable()
+                        .scaledToFit()
+                } else if(playerHand == 1) {
+                    Image("choki")
+                        .resizable()
+                        .scaledToFit()
+                } else if(playerHand == 2) {
+                    Image("pa")
+                       .resizable()
+                       .scaledToFit()
+                }
                
                 
             }
@@ -141,6 +158,8 @@ struct ContentView: View {
         // 手を選択された場合はゲームをそのまま続けられなくする
         self.canGame = true
     }
+    
+    
     
 }
 
