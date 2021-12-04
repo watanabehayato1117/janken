@@ -10,16 +10,26 @@ struct ContentView: View {
     @State private var playerHand = 0
     @State private var computerHand = 0
     @State private var text = "じゃんけん"
-    @State private var myWin = "0"
-    @State private var myLose = "0"
+    @State private var NextText = "次へ"
+    @State private var myWin = 0
+    @State private var myLose = 0
+    @State private var Draw = 0
     // 手を選択できるかを判定する
     @State private var canGame = false
     // ランダム表示に使用する変数
     @State private var counter = 0
     @State private var enemyRandomImage = "gu"
     
+    @State private var GameCount = 0
+   
+   
+    
     var body: some View {
-      
+        
+        //if(myWin < 5 || myLose < 5) {
+        if(myWin < 2 && myLose < 2){//テストのため、２回
+        
+        
         VStack {
             
             /** 顔 */
@@ -55,8 +65,7 @@ struct ContentView: View {
                     }
                 }
                 VStack{
-                Text("相手の勝利数")
-                Text(myLose)
+                    Text("相手の勝利数: \(myLose)").padding(10)
                 }
                 }.onAppear(){
                     Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true){timer in
@@ -70,30 +79,27 @@ struct ContentView: View {
                             self.counter = 0
                         }
                     }
-                
- 
             }
-            /** 文字 */
-            Text(text)
-                .font(.title)
             
+                /** 文字 */
+            Text(text)
+             .font(.title)
             
             /** 自分の手 */
-            
             HStack{
                 VStack{
-                    Text("自分の勝利数")
-                    Text(myWin)
+                    Text("自分の勝利数 : \(myWin)")
+                    
 
                     if(self.canGame){
                         Button(action:{
                             self.canGame = false
+                            text = "じゃんけん"
                         }){
-                            Text("次へ")
+                            Text(NextText)
                         }
                     }
                 }
-                    
                 
                 if(playerHand == 0) {
                     Image("gu")
@@ -108,42 +114,65 @@ struct ContentView: View {
                        .resizable()
                        .scaledToFit()
                 }
-               
-                
             }
-            /** ボタン */
+            /** 一番下のボタン */
+            // ボタンを押したら、勝ちをカウントする。
+            
             HStack {
-                Button(action: {
+            
+                Button(action: {//自分のぐーのボタン
                     onHandButton(handNum: 0)
+                    
                 }) {
                     Image("b_gu")
-                        .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
                 }.disabled(self.canGame)
+               
                 
-                Button(action: {
+                
+                Button(action: {//自分のちょきのボタン
                     onHandButton(handNum: 1)
+                    
                 }) {
                     Image("b_choki")
-                        .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
                 }.disabled(self.canGame)
                 
-                Button(action: {
+                Button(action: {//自分のパーのボタン
                     onHandButton(handNum: 2)
+                   
                 }) {
+                    
                     Image("b_pa")
-                        .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
                 }.disabled(self.canGame)
+
+            }
+           
+        }}else{//５回戦の後に表示されるページ------------------------------------
+            VStack{
+            Text("自分の勝利数 : \(myWin)")
+            Text("相手の勝利数 : \(myLose)")
+            Text("あいこ : \(Draw)")
                 
+            Button(action: {//再戦するボタン
+                self.myWin = 0
+                self.myLose = 0
+                self.Draw = 0
+                self.computerHand = 0
+                
+                }) {
+                    Text("再戦する")
+                }
+            
             }
         }
     }
-    func onHandButton(handNum:Int) -> Void{
+
+func onHandButton(handNum:Int) -> Void{
         if(handNum == 0){
             print("グー")
         }else if(handNum == 1){
@@ -154,18 +183,19 @@ struct ContentView: View {
         self.playerHand = handNum;
         self.computerHand = chooseComputerHand();
         self.text = determineVictoryOrDefeat(playerHand:self.playerHand, computerHand:self.computerHand)
+        if(text == "ぽん……あなたの勝ちです"){
+            self.myWin+=1
+       }else if(text == "ぽん……あなたの負けです"){
+           self.myLose+=1
+       }else{
+           self.Draw+=1
+    }
         
         // 手を選択された場合はゲームをそのまま続けられなくする
         self.canGame = true
     }
-    
-    
-    
 }
 
-    
-
- 
 func chooseComputerHand() -> Int {
     let random = Int.random(in: 0..<3)
     let computerHand = random
@@ -189,10 +219,9 @@ func determineVictoryOrDefeat(playerHand:Int, computerHand:Int) -> String {
         result = "ぽん……あなたの負けです";
     }
     return result
-
 }
 
- 
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
