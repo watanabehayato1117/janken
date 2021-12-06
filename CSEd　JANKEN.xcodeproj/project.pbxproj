@@ -16,7 +16,7 @@
 /* Begin PBXFileReference section */
 		4AE81765275718A0009C8769 /* CSEd　JANKEN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CSEd　JANKEN.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE81768275718A0009C8769 /* CSEd_JANKENApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSEd_JANKENApp.swift; sourceTree = "<group>"; };
-		4AE8176A275718A0009C8769 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4AE8176A275718A0009C8769 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		4AE8176C275718A4009C8769 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4AE8176F275718A4009C8769 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */

@@ -19,24 +19,18 @@ struct ContentView: View {
     // ランダム表示に使用する変数
     @State private var counter = 0
     @State private var enemyRandomImage = "gu"
-    
-    @State private var GameCount = 0
-   
-   
+    @State private var GameCount = 1
     
     var body: some View {
         
-        //if(myWin < 5 || myLose < 5) {
         if(myWin < 2 && myLose < 2){//テストのため、２回
-        
-        
         VStack {
+            Text(" \(GameCount)回戦目")
             
             /** 顔 */
             Image("face")
                 .resizable()
                 .scaledToFit()
-            
             /** 相手の手 */
             
             HStack{
@@ -81,12 +75,12 @@ struct ContentView: View {
                     }
             }
             
-                /** 文字 */
+        //現在の試合の状況をお知らせするテキスト
             Text(text)
              .font(.title)
             
             /** 自分の手 */
-            HStack{
+            HStack(spacing: 0.0){
                 VStack{
                     Text("自分の勝利数 : \(myWin)")
                     
@@ -115,6 +109,8 @@ struct ContentView: View {
                        .scaledToFit()
                 }
             }
+            .padding(.top, 6.0)
+            
             /** 一番下のボタン */
             // ボタンを押したら、勝ちをカウントする。
             
@@ -154,15 +150,17 @@ struct ContentView: View {
            
         }}else{//５回戦の後に表示されるページ------------------------------------
             VStack{
+            Text("\(GameCount-1)回戦の結果")
             Text("自分の勝利数 : \(myWin)")
             Text("相手の勝利数 : \(myLose)")
             Text("あいこ : \(Draw)")
-                
             Button(action: {//再戦するボタン
                 self.myWin = 0
                 self.myLose = 0
                 self.Draw = 0
                 self.computerHand = 0
+                self.GameCount = 1
+                self.text = "じゃんけん"
                 
                 }) {
                     Text("再戦する")
@@ -185,10 +183,13 @@ func onHandButton(handNum:Int) -> Void{
         self.text = determineVictoryOrDefeat(playerHand:self.playerHand, computerHand:self.computerHand)
         if(text == "ぽん……あなたの勝ちです"){
             self.myWin+=1
+            self.GameCount+=1
        }else if(text == "ぽん……あなたの負けです"){
            self.myLose+=1
+           self.GameCount+=1
        }else{
            self.Draw+=1
+           self.GameCount+=1
     }
         
         // 手を選択された場合はゲームをそのまま続けられなくする
