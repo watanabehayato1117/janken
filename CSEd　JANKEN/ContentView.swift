@@ -23,7 +23,9 @@ struct ContentView: View {
     
     var body: some View {
         
-        if(myWin < 2 && myLose < 2){//テストのため、２回
+        
+        if (GameCount < 6) {
+       //テストのため、２回
         VStack {
             Text(" \(GameCount)回戦目")
             
@@ -116,7 +118,9 @@ struct ContentView: View {
             
             HStack {
             
+                
                 Button(action: {//自分のぐーのボタン
+                    
                     onHandButton(handNum: 0)
                     
                 }) {
@@ -128,7 +132,9 @@ struct ContentView: View {
                 
                 
                 Button(action: {//自分のちょきのボタン
+                   
                     onHandButton(handNum: 1)
+                    
                     
                 }) {
                     Image("b_choki")
@@ -137,7 +143,9 @@ struct ContentView: View {
                 }.disabled(self.canGame)
                 
                 Button(action: {//自分のパーのボタン
+                   
                     onHandButton(handNum: 2)
+                    
                    
                 }) {
                     
@@ -147,10 +155,26 @@ struct ContentView: View {
                 }.disabled(self.canGame)
 
             }
-           
-        }}else{//５回戦の後に表示されるページ------------------------------------
+            
+        }
+            
+        }else{
+            
+        
+        //５回戦の後に表示されるページ------elseiranai------------
             VStack{
-            Text("\(GameCount-1)回戦の結果")
+                
+                Text("\(GameCount-1)回戦の結果")
+                
+                if(myWin > myLose){
+                    Text("あなたの勝ちです！")
+                }else if(myWin < myLose){
+                    Text("あなたの負けです。")
+                }else{
+                    Text("引き分けです。")
+                }
+                    
+            
             Text("自分の勝利数 : \(myWin)")
             Text("相手の勝利数 : \(myLose)")
             Text("あいこ : \(Draw)")
@@ -165,7 +189,6 @@ struct ContentView: View {
                 }) {
                     Text("再戦する")
                 }
-            
             }
         }
     }
@@ -214,7 +237,6 @@ func determineVictoryOrDefeat(playerHand:Int, computerHand:Int) -> String {
     }
     else if ((playerHand == 2 && computerHand == 0)||(playerHandTemp == computerHand)) {
         result = "ぽん……あなたの勝ちです";
-       
             }
     else {
         result = "ぽん……あなたの負けです";
